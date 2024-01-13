@@ -1,14 +1,8 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+use borsh_derive::{BorshDeserialize, BorshSerialize};
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub mod instructions;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+#[derive(Debug, BorshDeserialize, BorshSerialize)]
+pub struct CounterAccount {
+    pub counter: u32,
 }
