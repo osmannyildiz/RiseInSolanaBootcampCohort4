@@ -14,15 +14,15 @@ export class Review {
     borshInstructionSchema = borsh.struct([
         borsh.u8("variant"),
         borsh.str("title"),
-        borsh.u8("rating"),
         borsh.str("description"),
+        borsh.u8("rating"),
     ]);
 
     static borshAccountSchema = borsh.struct([
         borsh.bool("initialized"),
-        borsh.u8("rating"),
-        borsh.str("description"),
         borsh.str("title"),
+        borsh.str("description"),
+        borsh.u8("rating"),
     ]);
 
     serialize(): Buffer {

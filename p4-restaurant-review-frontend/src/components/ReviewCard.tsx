@@ -18,7 +18,7 @@ const ReviewCard: FC<CardProps> = ({ review }) => {
             </p>
             <p
                 className={`mt-6 max-w-[30ch] text-sm opacity-75`}
-            >{`${rating}/5`}</p>
+            >{`${rating}/10`}</p>
         </div>
     );
 };

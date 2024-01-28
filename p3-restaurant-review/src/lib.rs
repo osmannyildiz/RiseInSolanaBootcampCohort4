@@ -33,6 +33,7 @@ pub fn process_instruction(
             rating,
         } => add_review(program_id, accounts, title, description, rating),
         ReviewInstructions::UpdateReview {
+            title: _,
             description,
             rating,
         } => update_review(program_id, accounts, description, rating),
