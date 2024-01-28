@@ -30,7 +30,8 @@ async fn success() {
     // Start the program test
     let (mut banks_client, payer, recent_blockhash) = program_test.start().await;
 
-    let amount = 10_000;
+    let mint_amount = 10_000;
+    let transfer_amount = 8_000u64;
     let decimals = 9;
     let rent = Rent::default();
 
@@ -118,7 +119,7 @@ async fn success() {
             &source.pubkey(),
             &payer.pubkey(),
             &[],
-            amount,
+            mint_amount,
         )
         .unwrap()],
         Some(&payer.pubkey()),
@@ -128,10 +129,12 @@ async fn success() {
     banks_client.process_transaction(transaction).await.unwrap();
 
     // Create an instruction following the account order expected by the program
+    let mut transfer_instruction_data: Vec<u8> = vec![0];
+    transfer_instruction_data.extend_from_slice(&transfer_amount.to_le_bytes());
     let transaction = Transaction::new_signed_with_payer(
-        &[Instruction::new_with_bincode(
+        &[Instruction::new_with_bytes(
             program_id,
-            &(),
+            &transfer_instruction_data,
             vec![
                 AccountMeta::new(source.pubkey(), false),
                 AccountMeta::new_readonly(mint.pubkey(), false),
@@ -148,12 +151,12 @@ async fn success() {
     // See that the transaction processes successfully
     banks_client.process_transaction(transaction).await.unwrap();
 
-    // Check that the destination account now has 7000 tokens
+    // Check that the destination account now has `transfer_amount` tokens
     let account = banks_client
         .get_account(destination.pubkey())
         .await
         .unwrap()
         .unwrap();
     let token_account = Account::unpack(&account.data).unwrap();
-    assert_eq!(token_account.amount, 7000);
+    assert_eq!(token_account.amount, transfer_amount);
 }

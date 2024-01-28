@@ -6,6 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+borsh = "1.2.1"
+borsh-derive = "1.2.1"
 solana-program = "1.17.6"
 spl-token = { version = "4.0", features = [ "no-entrypoint" ] }
 
