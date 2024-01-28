@@ -43,12 +43,83 @@ pub fn process_instruction(
         CounterInstructions::Decrement => {
             counter_account.counter -= 1;
         }
+        CounterInstructions::Update(args) => counter_account.counter = args.value,
         CounterInstructions::Reset => {
             counter_account.counter = 0;
         }
-        CounterInstructions::Update(args) => counter_account.counter = args.value,
     }
 
     counter_account.serialize(&mut &mut account.data.borrow_mut()[..])?;
     Ok(())
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use solana_program::clock::Epoch;
+    use std::mem;
+
+    #[test]
+    fn test_counter() {
+        let program_id = Pubkey::default();
+        let account_key = Pubkey::default();
+        let mut account_lamports = 0;
+        let mut account_data = vec![0; mem::size_of::<u32>()];
+        let account_owner = Pubkey::default();
+
+        let counter_account = AccountInfo::new(
+            &account_key,
+            false, // is this account going to sign transactions?
+            true,
+            &mut account_lamports,
+            &mut account_data,
+            &account_owner,
+            false,            // is this account a program?
+            Epoch::default(), // when the next rent fee is due?
+        );
+        let accounts = vec![counter_account];
+
+        let increment_instruction_data: Vec<u8> = vec![0];
+        let decrement_instruction_data: Vec<u8> = vec![1];
+        let mut update_instruction_data: Vec<u8> = vec![2];
+        let reset_instruction_data: Vec<u8> = vec![3];
+
+        // test increment
+        process_instruction(&program_id, &accounts, &increment_instruction_data).unwrap();
+        assert_eq!(
+            CounterAccount::try_from_slice(&accounts[0].data.borrow())
+                .unwrap()
+                .counter,
+            1
+        );
+
+        // test decrement
+        process_instruction(&program_id, &accounts, &decrement_instruction_data).unwrap();
+        assert_eq!(
+            CounterAccount::try_from_slice(&accounts[0].data.borrow())
+                .unwrap()
+                .counter,
+            0
+        );
+
+        // test update
+        let update_value = 42u32;
+        update_instruction_data.extend_from_slice(&update_value.to_le_bytes());
+        process_instruction(&program_id, &accounts, &update_instruction_data).unwrap();
+        assert_eq!(
+            CounterAccount::try_from_slice(&accounts[0].data.borrow())
+                .unwrap()
+                .counter,
+            42
+        );
+
+        // test reset
+        process_instruction(&program_id, &accounts, &reset_instruction_data).unwrap();
+        assert_eq!(
+            CounterAccount::try_from_slice(&accounts[0].data.borrow())
+                .unwrap()
+                .counter,
+            0
+        );
+    }
 }
