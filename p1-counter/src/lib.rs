@@ -23,11 +23,11 @@ entrypoint!(process_instruction);
 pub fn process_instruction(
     _program_id: &Pubkey, // contract identifier, like the contract address. since we didn't need it, we prefixed it with an underscore
     accounts: &[AccountInfo], // accounts involved in this transaction. this must include CounterAccount
-    instructions_data: &[u8],
+    instruction_data: &[u8],
 ) -> ProgramResult {
     msg!("Counter program entry point");
 
-    let instruction: CounterInstructions = CounterInstructions::unpack(instructions_data)?;
+    let instruction: CounterInstructions = CounterInstructions::unpack(instruction_data)?;
 
     let accounts_iter = &mut accounts.iter();
     let account = next_account_info(accounts_iter)?;
