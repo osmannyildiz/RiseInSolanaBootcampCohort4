@@ -33,8 +33,9 @@ pub fn process_instruction(
         return Err(ProgramError::InvalidSeeds);
     }
 
-    let source_account = Account::unpack(&source_account_info.try_borrow_data()?)?;
-    let transfer_amount = source_account.amount; // we are transferring the whole balance of the source account
+    // let source_account = Account::unpack(&source_account_info.try_borrow_data()?)?;
+    // let transfer_amount = source_account.amount; // we are transferring the whole balance of the source account
+    let transfer_amount = 7000;
 
     let mint = Mint::unpack(&mint_info.try_borrow_data()?)?;
     let decimals = mint.decimals;

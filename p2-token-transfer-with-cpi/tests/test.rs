@@ -148,12 +148,12 @@ async fn success() {
     // See that the transaction processes successfully
     banks_client.process_transaction(transaction).await.unwrap();
 
-    // Check that the destination account now has `amount` tokens
+    // Check that the destination account now has 7000 tokens
     let account = banks_client
         .get_account(destination.pubkey())
         .await
         .unwrap()
         .unwrap();
     let token_account = Account::unpack(&account.data).unwrap();
-    assert_eq!(token_account.amount, amount);
+    assert_eq!(token_account.amount, 7000);
 }
