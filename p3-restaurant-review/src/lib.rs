@@ -31,12 +31,14 @@ pub fn process_instruction(
             title,
             description,
             rating,
-        } => add_review(program_id, accounts, title, description, rating),
+            location,
+        } => add_review(program_id, accounts, title, description, rating, location),
         ReviewInstructions::UpdateReview {
             title: _,
             description,
             rating,
-        } => update_review(program_id, accounts, description, rating),
+            location,
+        } => update_review(program_id, accounts, description, rating, location),
     }
 }
 
@@ -46,6 +48,7 @@ pub fn add_review(
     title: String,
     description: String,
     rating: u8,
+    location: String,
 ) -> ProgramResult {
     let accounts_iter = &mut accounts.iter();
     let initializer_account = next_account_info(accounts_iter)?;
@@ -108,6 +111,7 @@ pub fn add_review(
     account_state.title = title;
     account_state.description = description;
     account_state.rating = rating;
+    account_state.location = location;
     account_state.is_initialized = true;
 
     account_state.serialize(&mut &mut pda_account.data.borrow_mut()[..])?; // serializing state account's state
@@ -120,6 +124,7 @@ pub fn update_review(
     accounts: &[AccountInfo],
     description: String,
     rating: u8,
+    location: String,
 ) -> ProgramResult {
     let accounts_iter = &mut accounts.iter();
     let initializer_account = next_account_info(accounts_iter)?;
@@ -165,15 +170,18 @@ pub fn update_review(
     msg!("- Title: {}", account_state.title);
     msg!("- Description: {}", account_state.description);
     msg!("- Rating: {}", account_state.rating);
+    msg!("- Location: {}", account_state.location);
 
     account_state.description = description;
     account_state.rating = rating;
+    account_state.location = location;
     // we don't want to change the title since we use it as an identifier
 
     msg!("Review after update:");
     msg!("- Title: {}", account_state.title);
     msg!("- Description: {}", account_state.description);
     msg!("- Rating: {}", account_state.rating);
+    msg!("- Location: {}", account_state.location);
 
     account_state.serialize(&mut &mut pda_account.data.borrow_mut()[..])?; // serializing state account's state
 

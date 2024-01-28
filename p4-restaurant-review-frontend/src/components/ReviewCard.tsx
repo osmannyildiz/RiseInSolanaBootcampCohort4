@@ -6,7 +6,7 @@ interface CardProps {
 }
 
 const ReviewCard: FC<CardProps> = ({ review }) => {
-    const { title, description, rating } = review;
+    const { title, description, rating, location } = review;
 
     return (
         <div className="relative group rounded-lg border border-transparent px-5 py-4 transition-colors border-gray-300 bg-gray-100 dark:border-neutral-700 dark:bg-neutral-800/30 m-4">
@@ -19,6 +19,9 @@ const ReviewCard: FC<CardProps> = ({ review }) => {
             <p
                 className={`mt-6 max-w-[30ch] text-sm opacity-75`}
             >{`${rating}/10`}</p>
+            <p className={`mt-3 max-w-[30ch] text-sm opacity-50`}>
+                Location: {location}
+            </p>
         </div>
     );
 };
