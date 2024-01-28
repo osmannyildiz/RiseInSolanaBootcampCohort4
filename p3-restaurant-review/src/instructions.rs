@@ -8,7 +8,6 @@ pub enum ReviewInstructions {
         rating: u8,
     },
     UpdateReview {
-        title: String,
         description: String,
         rating: u8,
     },
@@ -34,7 +33,6 @@ impl ReviewInstructions {
                 rating: payload.rating,
             },
             1 => Self::UpdateReview {
-                title: payload.title,
                 description: payload.description,
                 rating: payload.rating,
             },
