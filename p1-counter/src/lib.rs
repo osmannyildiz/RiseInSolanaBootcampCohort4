@@ -32,7 +32,7 @@ pub fn process_instruction(
     let accounts_iter = &mut accounts.iter();
     let account = next_account_info(accounts_iter)?;
     // here we know that we have only one account to work with
-    // if we had more, we would need to loop and call next_account_info multiple times
+    // if we had more, we would need to call next_account_info multiple times
 
     let mut counter_account = CounterAccount::try_from_slice(&account.data.borrow())?;
 
