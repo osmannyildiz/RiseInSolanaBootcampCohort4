@@ -8,6 +8,7 @@ use solana_program::{
     pubkey::Pubkey,
 };
 
+pub mod instructions;
 pub mod state;
 
 /// Define the type of state stored in accounts
