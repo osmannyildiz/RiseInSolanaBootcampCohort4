@@ -3,7 +3,7 @@ use crate::state::{AccountState, ReviewError};
 use borsh::BorshSerialize;
 use solana_program::{
     account_info::{next_account_info, AccountInfo},
-    borsh1::try_from_slice_unchecked,
+    borsh1::try_from_slice_unchecked, // for Solana Playground, change this as "borsh0_10"
     entrypoint,
     entrypoint::ProgramResult,
     msg,
