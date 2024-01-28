@@ -9,6 +9,7 @@ edition = "2021"
 borsh = "1.2.1"
 borsh-derive = "1.2.1"
 solana-program = "1.17.7"
+thiserror = "1.0.56"
 
 [dev-dependencies]
 solana-program-test = "1.17.7"
